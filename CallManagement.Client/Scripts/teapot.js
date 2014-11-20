@@ -8,11 +8,10 @@
 
         // default url
         if (url === undefined) url = '/Home/Teapot';
-        text = text.replace('Teapot', '<a class="teapot" href="' + url + '">Teapot</a>');
-        text = text.replace('teapot', '<a class="teapot" href="' + url + '">teapot</a>');
         
-        return text;
-
+        var value = 'Replace a string';
+        var search = /teapot/i;
+        return text.replace(search, '<a class="teapot" href="' + url + '">$&</a>');
     },
     remove: function (text) {
         text = teapot.htmlDecode(text);
