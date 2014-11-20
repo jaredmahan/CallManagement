@@ -1,0 +1,172 @@
+﻿<div ng-app="workOrderApp" style="margin-top: 20px;">
+    <div ng-controller="workOrderController">
+        <div class="row" style="margin-bottom: 5px;">
+            <div class="col-md-12">
+                <a href="" class="btn btn-success" ng-click="addNew()">
+                    <i class="glyphicon glyphicon-plus"></i> New Work Order
+                </a>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <b>New and Improved QT.TMA - My WorkOrders</b>
+            </div>
+            <div class="panel-body" style="padding-bottom: 0px">
+                <table class="table table-striped table-hover table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th class="hidden">Id</th>
+                            <th>Name</th>
+                            <th>Requestor</th>
+                            <th>Created</th>
+                            <th>Modified</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="wo in workOrders" style="cursor: pointer" ng-mouseover="updatePanel(wo)" ng-click="editExisting(wo)">
+                            <td class="hidden" ng-bind="wo.Id"></td>
+                            <td ng-bind-html="wo.Name"></td>
+                            <td ng-bind="wo.Requestor"></td>
+                            <td ng-bind="wo.Created | date"></td>
+                            <td ng-bind="wo.Modified | date"></td>
+                            <td style="width: 90px;">
+                                <a href="" class="btn btn-danger btn-xs" ng-click="removeWorkOrder(wo)">
+                                    <i class="glyphicon glyphicon-remove"></i> Close now
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="well row" style="margin-bottom: 0px;">
+                    <div class="col-md-6">
+                        Description:
+                        <div class="form-control" style="width:100% !important; height: 120px; max-width: none;" ng-bind-html="details.Description"></div>
+                    </div>
+                    <div class="col-md-6">
+                        Comments:
+                        <div class="form-control" style="width:100% !important;  height: 120px; max-width: none;" ng-bind-html="details.Comments"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel" ng-bind="modalTitle"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" ng-model="selectedWO.Name" />
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label>Requestor</label>
+                                <input type="text" class="form-control" ng-model="selectedWO.Requestor" />
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea class="form-control" ng-model="selectedWO.Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label>Comments</label>
+                                <textarea class="form-control" ng-model="selectedWO.Comments"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="saveWorkOrder(selectedWO)">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/teapot.js"></script>
+    <script type="text/javascript">
+        (function (angular) {
+            var app = angular.module("workOrderApp", ['ngSanitize']);
+            app.controller("workOrderController", ['$scope', '$http',
+                function ($scope, $http) {
+                    $('#myModal').on('shown.bs.modal', function () {
+                        $(this).find('input[type="text"]').first().focus();
+                    })
+                    $scope.details = { Description: null, Comments: null };
+                    $scope.selectedWO = null;
+                    $scope.selectedIndex = null;
+                    $scope.modalTitle = null;
+                    $http.get('/api/WorkOrder').success(function (data) {
+                        data = $.map(data, function (el, idx) {
+                            el.Name = teapot.add(el.Name);
+                            return el;
+                        });
+                        $scope.workOrders = data;
+                    });
+                    $scope.updatePanel = function (workOrder) {
+                        $scope.details = {
+                            Comments: workOrder.Comments.replace('Teapot', '<a href="/Home/Teapot">Teapot</a>'),
+                            Description: workOrder.Description.replace('Teapot', '<a href="/Home/Teapot">Teapot</a>')
+                        };
+                    };
+                    $scope.removeWorkOrder = function (workOrder) {
+                        if (!confirm('Are you sure you want to close the call?')) return;
+                        var index = $scope.workOrders.indexOf(workOrder);
+                        $scope.workOrders.splice(index, 1);
+
+                        $http.delete('/api/WorkOrder/Delete?id=' + workOrder.Id);
+                    };
+                    $scope.editExisting = function (workOrder) {
+                        workOrder.Name = teapot.remove(workOrder.Name);
+                        $scope.selectedIndex = $scope.workOrders.indexOf(workOrder);
+                        $scope.selectedWO = angular.copy(workOrder);
+                        $scope.modalTitle = 'Edit Workorder: ' + $scope.selectedWO.Name;
+                        $('#myModal').modal('show');
+                    };
+                    $scope.saveWorkOrder = function (workOrder) {
+
+                        if ($scope.selectedIndex === null) {
+                            workOrder.Modified = new Date();
+                            workOrder.Created = new Date();
+                            $http.post('/api/WorkOrder/Post', workOrder).success(function (data) {
+                                data.Name = teapot.add(data.Name);
+                                $scope.workOrders.push(data);
+                            });
+
+                        } else {
+                            workOrder.Modified = new Date();
+                            $http.post('/api/WorkOrder/Post', workOrder).success(function (data) {
+                                data.Name = teapot.add(data.Name);
+                                angular.extend($scope.workOrders[$scope.selectedIndex], data);
+                            });
+                        }
+
+                        $('#myModal').modal('hide');
+                    };
+                    $scope.addNew = function () {
+                        workOrder.Name = teapot.remove(workOrder.Name);
+                        $scope.selectedIndex = null;
+                        $scope.selectedWO = null;
+                        $scope.modalTitle = 'Create New Workorder';
+                        $('#myModal').modal('show');
+                    }
+
+
+                }
+            ]);
+        }(angular));
+
+        
+    </script>
+}

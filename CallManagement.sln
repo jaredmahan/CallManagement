@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallManagement.Model", "CallManagement.Model\CallManagement.Model.csproj", "{4AD03339-EF80-4EEC-BEDB-469049171EA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallManagement.Client", "CallManagement.Client\CallManagement.Client.csproj", "{333EB266-723C-4532-8034-522CB57162CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FF5B4D7D-719A-4E94-9E72-BA043F6A5DB7}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://jmahan-qt.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = CallManagement.Client\\CallManagement.Client.csproj
+		SccProjectName1 = CallManagement.Client
+		SccLocalPath1 = CallManagement.Client
+		SccProjectUniqueName2 = CallManagement.Model\\CallManagement.Model.csproj
+		SccProjectName2 = CallManagement.Model
+		SccLocalPath2 = CallManagement.Model
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4AD03339-EF80-4EEC-BEDB-469049171EA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AD03339-EF80-4EEC-BEDB-469049171EA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AD03339-EF80-4EEC-BEDB-469049171EA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AD03339-EF80-4EEC-BEDB-469049171EA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{333EB266-723C-4532-8034-522CB57162CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{333EB266-723C-4532-8034-522CB57162CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{333EB266-723C-4532-8034-522CB57162CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{333EB266-723C-4532-8034-522CB57162CF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

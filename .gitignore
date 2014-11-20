@@ -41,3 +41,14 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+$tf/
+$packages/
+packages/
+CallManagement.Model/obj/
+CallManagement.Model/bin/
+CallManagement.Client/obj/
+CallManagement.Client/bin/
+CallManagement/obj/
+CallManagement/bin/
+CallManagement/
